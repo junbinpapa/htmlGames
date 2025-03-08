@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>16칸 색상 변경 앱</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+        #grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            height: 100vh;
+            width: calc(100vh - 8px);
+            max-width: 100vw;
+            gap: 2px;
+        }
+        .cell {
+            background-color: #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+            font-size: 5vh;
+            aspect-ratio: 1 / 1;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="grid"></div>
+    <script>
+        // 디버깅용 메시지 추가
+        console.log("Script started");
+
+        try {
+            const colors = ['red', 'blue', 'green', 'yellow', '#ccc'];
+            const grid = document.getElementById('grid');
+
+            if (!grid) {
+                document.body.innerHTML = '<h1>그리드 요소를 찾을 수 없습니다!</h1>';
+                throw new Error('Grid element not found');
+            }
+
+            console.log("Grid found, creating cells");
+
+            for (let i = 1; i <= 16; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                cell.textContent = i;
+                cell.dataset.colorIndex = '4'; // 초기 회색
+                grid.appendChild(cell);
+
+                cell.addEventListener('click', function() {
+                    let currentIndex = parseInt(this.dataset.colorIndex);
+                    currentIndex = (currentIndex + 1) % colors.length;
+                    this.dataset.colorIndex = currentIndex;
+                    this.style.backgroundColor = colors[currentIndex];
+                    console.log(`Cell ${i} clicked, color: ${colors[currentIndex]}`);
+                });
+            }
+
+            console.log("Cells created successfully");
+        } catch (error) {
+            console.error("Error:", error);
+            document.body.innerHTML = '<h1>오류: ' + error.message + '</h1>';
+        }
+    </script>
+</body>
+</html>
